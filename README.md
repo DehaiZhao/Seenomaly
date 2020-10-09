@@ -102,7 +102,7 @@ We can see that synthetic data has the same visual effect complexity with real-w
 ## How to use
 ### Data
 
-1. Download [Rico animation dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/animations.tar.gz) and [Rico Heriarchies dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/unique_uis.tar.gz)
+1. Download [Rico animation dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/animations.tar.gz) and [Rico interaction traces dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/traces.tar.gz)
 2. cd `datasets`.
 3. Run `python3 get_data.py` to extract single frame from GIF, which also contains image processing like cleaning static images.
 4. Run `python3 get_class.py` to get label file, that is `label.txt`.
