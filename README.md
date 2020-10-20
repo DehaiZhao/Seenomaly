@@ -100,6 +100,9 @@ Here we show all the GIF examples in our paper
 We can see that synthetic data has the same visual effect complexity with real-world data, and it is actually not easy data, which means synthetic data can evaluate our model.
 
 ## How to use
+
+Note: This software is tested on tensorflow 1.13 with cuda 9.0 on Titan Xp GPU.
+
 ### Data
 
 1. Download [Rico animation dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/animations.tar.gz) and [Rico interaction traces dataset](https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/traces.tar.gz)
