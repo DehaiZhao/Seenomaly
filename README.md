@@ -116,6 +116,12 @@ Note: please change the file directory accoring to your environment.
 
 Change your own configuration and run `finetune.sh`.
 
+### Extract features
+
+1. Download the model [Here](https://drive.google.com/file/d/1g270LMhu-6kvP_Qswo2hEQM4h3r2FXUD/view?usp=sharing)
+2. Download the typical examples [Here](). Note that this is synthetic dataset and only for evaluation.
+3. 
+
 ## Demo
 
 ### Here are some GIFs selected randomly from our dataset. Apparently, they distribute at random space.
