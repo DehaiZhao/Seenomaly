@@ -120,7 +120,8 @@ Change your own configuration and run `finetune.sh`.
 
 1. Download the model [Here](https://drive.google.com/file/d/1g270LMhu-6kvP_Qswo2hEQM4h3r2FXUD/view?usp=sharing)
 2. Download the typical examples [Here](). Note that this is synthetic dataset and only for evaluation.
-3. 
+3. Load the model and run `extract_features.py` to map typical examples to feature space. After running this, you will obtain `features.p` file.
+4. Run `evaluation.py` to evalute the model. The KNN search algorithm is also in this file. You can refer to this method to create your applications.
 
 ## Demo
 
