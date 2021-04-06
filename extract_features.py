@@ -93,9 +93,7 @@ class FeatureExtractor(object):
 
     # Start the session and load the pre-trained weights
     self._sess = tf.Session()
-    #restore_fn(self._sess)
-    saver = tf.train.import_meta_graph(f"{ROOT_PATH}/Seenomaly/models/vea/model.ckpt-29471.meta")
-    saver.restore(self._sess, f"{ROOT_PATH}/Seenomaly/models/vea/model.ckpt-29471")
+    restore_fn(self._sess)
 
     # Local variables initializer, needed for queues etc.
     self._sess.run(tf.local_variables_initializer())

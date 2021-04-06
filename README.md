@@ -2,7 +2,12 @@
 
 Here we show all the GIF examples in our paper
 
-### Figure 1 (a)
+## Before `How to use` 
+
+* Please put the absolute path of Seeonomaly in [constants.py](constants.py) file.
+* For extracting features, the [model](https://drive.google.com/file/d/1g270LMhu-6kvP_Qswo2hEQM4h3r2FXUD/view?usp=sharing) needs to be unziped in side this directory `ROOT_PATH/Seenomaly/model/vea/`
+
+<!-- ### Figure 1 (a)
 
 <div align="center">
     <img src="https://github.com/DehaiZhao/Seenomaly/blob/master/image/sheet1.gif" width="300">
@@ -98,7 +103,7 @@ Here we show all the GIF examples in our paper
 </div>
 
 We can see that synthetic data has the same visual effect complexity with real-world data, and it is actually not easy data, which means synthetic data can evaluate our model.
-
+ -->
 ## How to use
 
 Note: This software is tested on tensorflow 1.13 with cuda 9.0 on Titan Xp GPU.

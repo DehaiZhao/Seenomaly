@@ -1,1 +1,1 @@
-ROOT_PATH = ""
+ROOT_PATH = "" # please add the absolute path of Seenomaly directory
