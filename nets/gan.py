@@ -119,7 +119,6 @@ def gan(inputs, label, num_classes=50, is_training=True):
       feature_real, label_real, end_points_d = discriminator(inputs, is_training = is_training)
       end_points.update(end_points_d)
       
-      adv_loss = tf.losses.mean_squared_error(feature_fake, feature_real, weights = 1.0)
       context_loss = tf.losses.absolute_difference(inputs, x_, weights = 10.0)
       encoder_loss = tf.losses.mean_squared_error(z, z_, weights = 10)
       real_loss = tf.losses.sigmoid_cross_entropy(tf.ones_like(label_real), label_real)
