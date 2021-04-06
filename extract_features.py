@@ -1,10 +1,13 @@
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import matplotlib.pyplot as plt
 from nets import nets_factory
-slim = tf.contrib.slim
+import tf_slim as slim
+# import tf_slim as slim
 import os
 import numpy as np
-from scipy.misc import imsave
+# from scipy.misc import imsave
 from scipy import misc
 from sklearn.decomposition import PCA
 from scipy.spatial import distance
@@ -14,20 +17,23 @@ import json
 import random
 import math
 
-'''
-gan:gan/generator/encoder/fc6  /home/cheer/Project/Do_Dont/models/gan/model.ckpt-29471
-vae:vae/encoder/fc6  /home/cheer/Project/Do_Dont/models/vae/model.ckpt-54717
-vaegan:vaegan/generator/encoder/fc6  /home/cheer/Project/Do_Dont/models/vaegan/model.ckpt-121858
-aernn:aernnfc  /home/cheer/Project/Do_Dont/models/aernn/model.ckpt-52198
+from constants import ROOT_PATH
 
-/home/cheer/Project/Do_Dont/Rico_Data/synthetic_data/label.txt
-/home/cheer/Project/Do_Dont/Rico_Data/test_data/images/label.txt
+'''
+gan:gan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/gan/model.ckpt-29471
+vae:vae/encoder/fc6  ROOT_PATH/Seenomaly/models/vae/model.ckpt-54717
+vaegan:vaegan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/vaegan/model.ckpt-121858
+aernn:aernnfc  ROOT_PATH/Seenomaly/models/aernn/model.ckpt-52198
+
+ROOT_PATH/Seenomaly/Rico_Data/synthetic_data/label.txt
+ROOT_PATH/Seenomaly/Rico_Data/test_data/images/label.txt
 
 '''
 
 net_name = 'vae'
 logits_name = 'vae/encoder/fc6'
-ck_path = '/home/cheer/Project/Do_Dont/models/vae/model.ckpt-54717'
+# ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-54717'
+ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-29471'
 
 
 batch_size = 1
@@ -35,9 +41,9 @@ image_size = 224
 _STRIDE = 8
 num_classes = 50 
 max_num_images = 225
-dataset_dir = '/home/cheer/Project/Do_Dont/Rico_Data'
-abnormal_label = '/home/cheer/Project/Do_Dont/Rico_Data/test_data/images/label.txt'
-normal_label = '/home/cheer/Project/Do_Dont/Rico_Data/label.txt'
+dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
+abnormal_label = f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images/label.txt'
+normal_label = f'{ROOT_PATH}/Seenomaly/Rico_Data/label.txt'
 
 save_dir = os.path.join(dataset_dir, 'features', 'real', net_name)
 
@@ -87,7 +93,9 @@ class FeatureExtractor(object):
 
     # Start the session and load the pre-trained weights
     self._sess = tf.Session()
-    restore_fn(self._sess)
+    #restore_fn(self._sess)
+    saver = tf.train.import_meta_graph(f"{ROOT_PATH}/Seenomaly/models/vea/model.ckpt-29471.meta")
+    saver.restore(self._sess, f"{ROOT_PATH}/Seenomaly/models/vea/model.ckpt-29471")
 
     # Local variables initializer, needed for queues etc.
     self._sess.run(tf.local_variables_initializer())

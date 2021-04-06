@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-from scipy.misc import imsave
+# from scipy.misc import imsave
 from scipy import misc
 from sklearn.decomposition import PCA
 from scipy.spatial import distance
@@ -14,6 +14,7 @@ from matplotlib.pyplot import imshow
 from PIL import Image
 from sklearn.manifold import TSNE
 import rasterfairy
+from constants import ROOT_PATH
 
 batch_size = 1
 image_size = 224
@@ -22,7 +23,7 @@ net_name = 'vae'
 _STRIDE = 8
 num_classes = 50 
 dataset_dir = '/home/cheer/Project/AutoTest/Rico_Data'
-save_dir = '/home/cheer/Project/Do_Dont/demo'
+save_dir = f'{ROOT_PATH}/Seenomaly/demo'
 
 def _sample_image(file_name):
   file_list = os.listdir(file_name)

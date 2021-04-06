@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
-
+from constants import ROOT_PATH
 typical_list = [2]
 K_list = [2]
 class_num = 9
@@ -13,7 +13,7 @@ spc = 25
 net_name = 'vae'
 add_normal = 1
 
-dataset_dir = '/home/cheer/Project/Do_Dont/Rico_Data'
+dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
 save_dir = os.path.join(dataset_dir, 'features', 'real', net_name)
 log_file = os.path.join(dataset_dir, 'results', net_name, 'real.txt')
 result_file = os.path.join(dataset_dir, 'results', net_name, 'result.txt')

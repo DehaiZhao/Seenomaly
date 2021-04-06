@@ -8,6 +8,8 @@ import numpy as np
 from tqdm import tqdm
 from skimage.measure import compare_ssim 
 
+from constants import ROOT_PATH
+
 _STRIDE = 8
 spc = 25
 image_width = 320
@@ -15,7 +17,7 @@ image_height = 540
 save_width = 280
 save_height = 500
 
-data_dir = '/home/cheer/Project/Do_Dont/Rico_Data/test_data/materials'
+data_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/materials'
 
 
 def compare_frame(frameA, frameB):
@@ -93,7 +95,7 @@ def main():
      
       if sample_len > 1:
         for _ in tqdm(range(int(sample_len))):
-          save_dir = os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/test_data/images', label, str(sample_count))
+          save_dir = os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images', label, str(sample_count))
           if not os.path.exists(save_dir):
             os.makedirs(save_dir)
           mask_width = random.randint(30, 60)
@@ -109,11 +111,11 @@ def main():
             B = np.full((mask_height, mask_width), random.randint(0, 255))
             save_image[y:y+mask_height, x:x+mask_width] = np.stack([R,G,B], 2)
             cv2.imwrite(os.path.join(save_dir, '{:03}'.format(i) + '.jpg'), cv2.resize(save_image, (save_width, save_height)))  
-          with open(os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/test_data/images', 'label.txt'), 'a') as label_file: 
+          with open(os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images', 'label.txt'), 'a') as label_file: 
             label_file.write(save_dir + ' '  + label + '\n')    
           sample_count += 1
       else:
-        save_dir = os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/test_data/images', label, str(sample_count))
+        save_dir = os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images', label, str(sample_count))
         if not os.path.exists(save_dir):
           os.makedirs(save_dir)
         mask_width = random.randint(30, 60)
@@ -128,7 +130,7 @@ def main():
           B = np.full((mask_height, mask_width), random.randint(0, 255))
           save_image[y:y+mask_height, x:x+mask_width] = np.stack([R,G,B], 2)
           cv2.imwrite(os.path.join(save_dir, '{:03}'.format(i) + '.jpg'), cv2.resize(save_image, (save_width, save_height)))  
-        with open(os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/test_data/images', 'label.txt'), 'a') as label_file: 
+        with open(os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images', 'label.txt'), 'a') as label_file: 
           label_file.write(save_dir + ' '  + label + '\n')    
         sample_count += 1
         if sample_count == spc:

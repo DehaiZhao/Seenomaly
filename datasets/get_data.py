@@ -1,4 +1,4 @@
-from skimage.measure import compare_ssim
+from skimage.metrics import structural_similarity as compare_ssim
 import imutils
 import shutil
 import os
