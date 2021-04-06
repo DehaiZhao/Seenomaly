@@ -12,6 +12,8 @@ import scipy
 import numpy as np
 
 import tensorflow as tf
+from constants import ROOT_PATH
+
 
 _NUM_VALIDATION = 1000
 _RANDOM_SEED = 0
@@ -19,7 +21,7 @@ _NUM_SHARDS = 20
 _STRIDE = 8
 dataset_name = 'rico_gif'
 
-dataset_dir = '/home/cheer/Project/Do_Dont/Rico_Data'
+dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
 output_dir = os.path.join(dataset_dir, 'tf_record', dataset_name)
 
 def bytes_feature(values):

@@ -29,7 +29,7 @@ from nets import fbn
 from nets import vaegan
 from nets import aernn
 
-slim = tf.contrib.slim
+import tf_slim as slim
 
 networks_map = {'vae': vae.vae,
                 'gan': gan.gan,

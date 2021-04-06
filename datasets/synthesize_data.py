@@ -8,6 +8,8 @@ import numpy as np
 from tqdm import tqdm
 from skimage.measure import compare_ssim 
 
+from constants import ROOT_PATH
+
 _STRIDE = 8
 spc = 1000
 image_width = 320
@@ -15,7 +17,7 @@ image_height = 540
 save_width = 280
 save_height = 500
 
-data_dir = '/home/cheer/Project/Do_Dont/Rico_Data/test_data/materials'
+data_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/materials'
 background_dir = '/home/cheer/program/slim/flowers/flower_photos'
 
 def compare_frame(frameA, frameB):
@@ -100,7 +102,7 @@ def main():
       for _ in tqdm(range(int(sample_len))):
         background = cv2.imread(os.path.join(background_dir, background_folder, random.choice(background_images)))
         background = cv2.resize(background, (image_width, image_height))
-        save_dir = os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/synthetic_data', label, str(sample_count))
+        save_dir = os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/synthetic_data', label, str(sample_count))
         if not os.path.exists(save_dir):
           os.makedirs(save_dir)    
         cv2.imwrite(os.path.join(save_dir, '000.jpg'), cv2.resize(background, (save_width, save_height)))
@@ -109,7 +111,7 @@ def main():
             crop = material_image[sample_list[i]][box[1]:box[3], box[0]:box[2]]
             background[box[1]:box[3], box[0]:box[2]] = crop
           cv2.imwrite(os.path.join(save_dir, '{:03}'.format(i) + '.jpg'), cv2.resize(background, (save_width, save_height)))  
-        with open(os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/synthetic_data', 'label.txt'), 'a') as label_file: 
+        with open(os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/synthetic_data', 'label.txt'), 'a') as label_file: 
           label_file.write(save_dir + ' '  + label + '\n')    
         sample_count += 1
 

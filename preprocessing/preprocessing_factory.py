@@ -24,7 +24,7 @@ from preprocessing import vae_preprocessing
 from preprocessing import fbn_preprocessing
 
 
-slim = tf.contrib.slim
+import tf_slim as slim
 
 
 def get_preprocessing(name, is_training=False):

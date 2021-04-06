@@ -1,10 +1,10 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from nets import nets_factory
-slim = tf.contrib.slim
+import tf_slim as slim
 import os
 import numpy as np
-from scipy.misc import imsave
+# from scipy.misc import imsave
 from scipy import misc
 from sklearn.decomposition import PCA
 from scipy.spatial import distance
@@ -13,13 +13,14 @@ import pickle
 import json
 import random
 import math
+from constants import ROOT_PATH
 
 '''
-gan:gan/generator/encoder/fc6  /home/cheer/Project/Do_Dont/models/gan/model.ckpt-29471
-c3d:c3d/fc8  /home/cheer/Project/Do_Dont/models/c3d/model.ckpt-106879
-vae:vae/encoder/fc6  /home/cheer/Project/Do_Dont/models/vae/model.ckpt-54717
-vaegan:vaegan/generator/encoder/fc6  /home/cheer/Project/Do_Dont/models/vaegan/model.ckpt-121858
-vaernn:aernn/fc  /home/cheer/Project/Do_Dont/models/aernn/model.ckpt-52198
+gan:gan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/gan/model.ckpt-29471
+c3d:c3d/fc8  ROOT_PATH/Seenomaly/models/c3d/model.ckpt-106879
+vae:vae/encoder/fc6  ROOT_PATH/Seenomaly/models/vae/model.ckpt-54717
+vaegan:vaegan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/vaegan/model.ckpt-121858
+vaernn:aernn/fc  ROOT_PATH/Seenomaly/models/aernn/model.ckpt-52198
 '''
 
 
@@ -30,10 +31,10 @@ _STRIDE = 8
 num_classes = 50 
 max_num_images = 600
 logits_name = 'vae/encoder/fc6'
-dataset_dir = '/home/cheer/Project/Do_Dont/Rico_Data'
-save_dir = '/home/cheer/Project/Do_Dont/demo'
-ck_path = '/home/cheer/Project/Do_Dont/models/vae/model.ckpt-54717'
-label_dir = '/home/cheer/Project/Do_Dont/demo/label.txt'
+dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
+save_dir = f'{ROOT_PATH}/Seenomaly/demo'
+ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-54717'
+label_dir = f'{ROOT_PATH}/Seenomaly/demo/label.txt'
 
 class FeatureExtractor(object):
 

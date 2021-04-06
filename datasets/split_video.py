@@ -10,6 +10,8 @@ from tqdm import tqdm
 from PIL import Image, ImageSequence
 from skimage.measure import compare_ssim
 
+from constants import ROOT_PATH
+
 _STRIDE = 8
 
 def compare_frame(frameA, frameB):
@@ -62,10 +64,10 @@ def rico():
   total = 0
   success = 0
   remove = 0
-  for root, dirs, files in os.walk('/home/cheer/Project/Do_Dont/Rico_Data/animations'):
+  for root, dirs, files in os.walk(f'{ROOT_PATH}/Seenomaly/Rico_Data/animations'):
     for name in files:
       file_name = os.path.join(root, name)
-      save_dir = '/home/cheer/Project/Do_Dont/Rico_Data/'
+      save_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data/'
       try:
         gif = Image.open(file_name)
         frame_iter = ImageSequence.Iterator(gif)
@@ -84,7 +86,7 @@ def rico():
       sys.stdout.flush()
 
 def video():
-  for root, dirs, files in os.walk('/home/cheer/Project/Do_Dont/Rico_Data/test_data/videos'):
+  for root, dirs, files in os.walk(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/videos'):
     for name in files:
       file_name = os.path.join(root, name)
       save_dir = os.path.splitext(file_name)[0].replace('/videos', '/images')
@@ -132,7 +134,7 @@ def video():
           print (max_box)
           box_list = box_list + str(max_box)[1:-1].replace(' ', '') + ' '
        
-      with open(os.path.join('/home/cheer/Project/Do_Dont/Rico_Data/test_data', 'label.txt'), 'a') as label_file: 
+      with open(os.path.join(f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data', 'label.txt'), 'a') as label_file: 
         label_file.write(os.path.splitext(file_name)[0].replace('videos', 'images') + ' ' + box_list + '\n')
       
 

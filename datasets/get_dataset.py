@@ -25,7 +25,7 @@ from __future__ import print_function
 import os
 import tensorflow as tf
 
-slim = tf.contrib.slim
+import tf_slim as slim
 
 _FILE_PATTERN = 'gif_%s_*.tfrecord'
 
