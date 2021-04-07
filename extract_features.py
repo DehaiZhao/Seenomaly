@@ -14,6 +14,8 @@ import json
 import random
 import math
 
+#Please use the parameters below to choose model. For example, if you use gan, you need to set net_name to 'gan', 
+#logits_name to 'gan/generator/encoder/fc6' and ck_path to '/home/cheer/Project/Do_Dont/models/gan/model.ckpt-29471'
 '''
 gan:gan/generator/encoder/fc6  /home/cheer/Project/Do_Dont/models/gan/model.ckpt-29471
 vae:vae/encoder/fc6  /home/cheer/Project/Do_Dont/models/vae/model.ckpt-54717
