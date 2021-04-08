@@ -215,8 +215,8 @@ if __name__ == '__main__':
   vaegan:vaegan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/vaegan/model.ckpt-121858
   aernn:aernnfc  ROOT_PATH/Seenomaly/models/aernn/model.ckpt-52198
 
-  ROOT_PATH/Seenomaly/Rico_Data/synthetic_data/label.txt
-  ROOT_PATH/Seenomaly/Rico_Data/test_data/images/label.txt
+  ROOT_PATH/Seenomaly/data/synthetic_data/label.txt
+  ROOT_PATH/Seenomaly/data/test_data/images/label.txt
   """
 
   parser = argparse.ArgumentParser(description = "Process baseline dataset for model")
