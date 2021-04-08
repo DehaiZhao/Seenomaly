@@ -30,10 +30,10 @@ ROOT_PATH/Seenomaly/Rico_Data/test_data/images/label.txt
 
 '''
 
-net_name = 'vae'
-logits_name = 'vae/encoder/fc6'
+net_name = 'gan'
+logits_name = 'gan/encoder/fc6'
 # ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-54717'
-ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-29471'
+ck_path = f'{ROOT_PATH}/Seenomaly/models/gan/model.ckpt-29471'
 
 
 batch_size = 1
