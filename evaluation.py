@@ -98,4 +98,9 @@ def main():
   #plt.show()
       
 if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description = "Process a file throught the model")
+  parser.add_argument("-n", "--netName", help="chooses the network type to be used", choices= ("gan", "vae", "vaegan", "aernn"), default="gan")
+
+  args = parser.parse_args()
+
   main()

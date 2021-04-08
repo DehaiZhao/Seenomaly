@@ -220,13 +220,13 @@ if __name__ == '__main__':
   """
 
   parser = argparse.ArgumentParser(description = "Process baseline dataset for model")
-  parser.add_argument("-m", "--model", help="chooses the model type to be used", choices= ("gan", "vae", "vaegan", "aernn"), default="gan")
+  parser.add_argument("-n", "--netName", help="chooses the network type to be used", choices= ("gan", "vae", "vaegan", "aernn"), default="gan")
   parser.add_argument("-c", "--checkpoint", help="sets the checkpint number", type=int, default=29471)
 
   args = parser.parse_args()
 
   logits_name = "gan/generator/encoder/fc6"
-  ck_path = os.path.join(constants.ROOT_PATH, "Seenomaly", "models", args.model, f"model.ckpt-{args.checkpoint}")
+  ck_path = os.path.join(constants.ROOT_PATH, "Seenomaly", "models", args.netName, f"model.ckpt-{args.checkpoint}")
 
 
   batch_size = 1
@@ -239,9 +239,9 @@ if __name__ == '__main__':
   abnormal_label = os.path.join(constants.DATA_PATH, "test_data", "images", "label.txt")
   normal_label = os.path.join(constants.DATA_PATH, "label.txt")
 
-  save_dir = os.path.join(constants.DATA_PATH, "features", "real", args.model)
+  save_dir = os.path.join(constants.DATA_PATH, "features", "real", args.netName)
 
-  exit(extract_features(args.model, ck_path, batch_size, (image_size, image_size, 3), _STRIDE, logits_name, save_dir))
+  exit(extract_features(args.netName, ck_path, batch_size, (image_size, image_size, 3), _STRIDE, logits_name, save_dir))
 
 
 
