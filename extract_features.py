@@ -17,6 +17,9 @@ import json
 import random
 import math
 
+import imageio
+from PIL import Image
+
 from constants import ROOT_PATH
 
 '''
@@ -177,8 +180,10 @@ def _concat_image(file_name):
     sample_list = random.sample(file_list, _STRIDE)
     sample_list.sort()
   for sample in sample_list:
-    image = misc.imread(os.path.join(file_name, sample))
-    image = misc.imresize(image, (image_size, image_size))
+    image = imageio.imread(os.path.join(file_name, sample))
+    #image = imageio.imresize(image, (image_size, image_size))
+    image = np.array(Image.fromarray(image))
+    image = np.resize(image, (image_size, image_size, 3))
     image = image / 255.0
     image_list.append(image)
   return image_list
