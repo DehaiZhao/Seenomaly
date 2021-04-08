@@ -164,14 +164,17 @@ class FeatureExtractor(object):
     return self._num_preproc_threads
 
 def _get_filenames_and_classes(label_dir):
+  if not os.path.exists(label_dir):
+    return []
   with open(label_dir) as list_file:
     file_list = list_file.readlines()
   return file_list
 
-def _concat_image(file_name):
-  file_list = os.listdir(file_name)
+def _concat_image(root, file_name):
+  file_path = os.path.join(".", root, file_name)
+  file_list = os.listdir(file_path)
   image_list = []
-  if len(file_list) in range(int(_STRIDE / 2) + 1, _STRIDE):
+  if len(file_list) in range(_STRIDE//2 + 1, _STRIDE):
     sample_list = file_list + random.sample(file_list, _STRIDE - len(file_list))
     sample_list.sort()
   else:  
@@ -220,7 +223,7 @@ def main(_):
 
   features = []
   for i in tqdm(range(len(gif_files))):
-    image_data = _concat_image(gif_files[i]) 
+    image_data = _concat_image(constants.UNQUALIFIED_DATA_PATH, gif_files[i])
     batch_image[0] = image_data
 
     feat = feature_extractor.forward([logits_name], batch_image, fetch_images=True)

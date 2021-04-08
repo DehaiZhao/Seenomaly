@@ -5,18 +5,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
-from constants import ROOT_PATH
+import constants
+
 typical_list = [2]
 K_list = [2]
 class_num = 9
 spc = 25
-net_name = 'vae'
+net_name = 'gan'
 add_normal = 1
 
-dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
-save_dir = os.path.join(dataset_dir, 'features', 'real', net_name)
-log_file = os.path.join(dataset_dir, 'results', net_name, 'real.txt')
-result_file = os.path.join(dataset_dir, 'results', net_name, 'result.txt')
+save_dir = os.path.join(constants.DATA_PATH, 'features', 'real', net_name)
+log_file = os.path.join(constants.DATA_PATH, 'results', net_name, 'real.txt')
+result_file = os.path.join(constants.DATA_PATH, 'results', net_name, 'result.txt')
 
 def evaluate(typical, K):
   images, pca_features, labels = pickle.load(open(os.path.join(save_dir, 'features.p'), 'rb'))
@@ -66,7 +66,7 @@ def evaluate(typical, K):
 
 def main():
   score_list = []
-  log_dir = os.path.join(dataset_dir, 'results', net_name)
+  log_dir = os.path.join(constants.DATA_PATH, 'results', net_name)
   if not os.path.exists(log_dir):
     os.makedirs(log_dir) 
   r = open(result_file, 'a')
