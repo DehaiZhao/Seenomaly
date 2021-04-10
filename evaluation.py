@@ -5,20 +5,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
-from constants import ROOT_PATH
+import argparse
+import constants
+
 typical_list = [2]
 K_list = [2]
 class_num = 9
 spc = 25
-net_name = 'vae'
 add_normal = 1
 
-dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
-save_dir = os.path.join(dataset_dir, 'features', 'real', net_name)
-log_file = os.path.join(dataset_dir, 'results', net_name, 'real.txt')
-result_file = os.path.join(dataset_dir, 'results', net_name, 'result.txt')
-
-def evaluate(typical, K):
+def evaluate(typical, K, save_dir, log_file):
   images, pca_features, labels = pickle.load(open(os.path.join(save_dir, 'features.p'), 'rb'))
   count = 0
   i = 0
@@ -64,9 +60,9 @@ def evaluate(typical, K):
   print ('***********************************', file = f)
   return score
 
-def main():
+def main(net_name, save_dir, log_file, result_file):
   score_list = []
-  log_dir = os.path.join(dataset_dir, 'results', net_name)
+  log_dir = os.path.join(constants.DATA_PATH, 'results', net_name)
   if not os.path.exists(log_dir):
     os.makedirs(log_dir) 
   r = open(result_file, 'a')
@@ -76,15 +72,15 @@ def main():
     k_time = []
     for k in K_list:
       start_time = time.time()
-      k_score.append(evaluate(T, k))
+      k_score.append(evaluate(T, k, save_dir, log_file))
       k_time.append(time.time() - start_time)
-      print (time.time() - start_time)
+      print ("Time: ", time.time() - start_time)
     score_list.append(k_score)
     time_list.append(sum(k_time) / len(K_list))
   print ('real', file = r)
   print (score_list, file = r)
   #print (time_list, file = r)
-  print (score_list)
+  print ("Score list: ", score_list)
 
   #fig = plt.figure()
   #plt.xlabel('K', fontsize = 20)
@@ -98,4 +94,13 @@ def main():
   #plt.show()
       
 if __name__ == '__main__':
-  main()
+  parser = argparse.ArgumentParser(description = "Process a file throught the model")
+  parser.add_argument("-n", "--netName", help="chooses the network type to be used", choices= ("gan", "vae", "vaegan", "aernn"), default="gan")
+
+  args = parser.parse_args()
+
+  save_dir = os.path.join(constants.DATA_PATH, 'features', 'real', args.netName)
+  log_file = os.path.join(constants.DATA_PATH, 'results', args.netName, 'real.txt')
+  result_file = os.path.join(constants.DATA_PATH, 'results', args.netName, 'result.txt')
+
+  main(args.netName, save_dir, log_file, result_file)

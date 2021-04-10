@@ -1,52 +1,26 @@
-# import tensorflow as tf
+import argparse
+
+import logging
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
+tf.get_logger().setLevel(logging.ERROR)
+
 import matplotlib.pyplot as plt
 from nets import nets_factory
 import tf_slim as slim
-# import tf_slim as slim
-import os
 import numpy as np
-# from scipy.misc import imsave
-from scipy import misc
 from sklearn.decomposition import PCA
-from scipy.spatial import distance
 from tqdm import tqdm
 import pickle
-import json
 import random
 import math
 
-from constants import ROOT_PATH
+import imageio
+from PIL import Image
 
-'''
-gan:gan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/gan/model.ckpt-29471
-vae:vae/encoder/fc6  ROOT_PATH/Seenomaly/models/vae/model.ckpt-54717
-vaegan:vaegan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/vaegan/model.ckpt-121858
-aernn:aernnfc  ROOT_PATH/Seenomaly/models/aernn/model.ckpt-52198
-
-ROOT_PATH/Seenomaly/Rico_Data/synthetic_data/label.txt
-ROOT_PATH/Seenomaly/Rico_Data/test_data/images/label.txt
-
-'''
-
-net_name = 'gan'
-logits_name = 'gan/encoder/fc6'
-# ck_path = f'{ROOT_PATH}/Seenomaly/models/vae/model.ckpt-54717'
-ck_path = f'{ROOT_PATH}/Seenomaly/models/gan/model.ckpt-29471'
-
-
-batch_size = 1
-image_size = 224
-_STRIDE = 8
-num_classes = 50 
-max_num_images = 225
-dataset_dir = f'{ROOT_PATH}/Seenomaly/Rico_Data'
-abnormal_label = f'{ROOT_PATH}/Seenomaly/Rico_Data/test_data/images/label.txt'
-normal_label = f'{ROOT_PATH}/Seenomaly/Rico_Data/label.txt'
-
-save_dir = os.path.join(dataset_dir, 'features', 'real', net_name)
-
+import constants
 
 class FeatureExtractor(object):
 
@@ -161,14 +135,17 @@ class FeatureExtractor(object):
     return self._num_preproc_threads
 
 def _get_filenames_and_classes(label_dir):
+  if not os.path.exists(label_dir):
+    return []
   with open(label_dir) as list_file:
     file_list = list_file.readlines()
   return file_list
 
-def _concat_image(file_name):
-  file_list = os.listdir(file_name)
+def _concat_image(root, file_name):
+  file_path = os.path.join(".", root, file_name)
+  file_list = os.listdir(file_path)
   image_list = []
-  if len(file_list) in range(int(_STRIDE / 2) + 1, _STRIDE):
+  if len(file_list) in range(_STRIDE//2 + 1, _STRIDE):
     sample_list = file_list + random.sample(file_list, _STRIDE - len(file_list))
     sample_list.sort()
   else:  
@@ -177,20 +154,18 @@ def _concat_image(file_name):
     sample_list = random.sample(file_list, _STRIDE)
     sample_list.sort()
   for sample in sample_list:
-    image = misc.imread(os.path.join(file_name, sample))
-    image = misc.imresize(image, (image_size, image_size))
+    image = imageio.imread(os.path.join(file_path, sample))
+    image = np.array(Image.fromarray(image))
+    image = np.resize(image, (image_size, image_size, 3))
     image = image / 255.0
     image_list.append(image)
   return image_list
 
-def main(_):
-  feature_extractor = FeatureExtractor(
-    network_name=net_name,
-    checkpoint_path=ck_path,
-    batch_size=batch_size)
+def extract_features(net_name, ck_path, batch_size, image_size, frames, logits_name, save_dir):
+  feature_extractor = FeatureExtractor(net_name, ck_path, batch_size)
   feature_extractor.print_network_summary()
 
-  batch_image = np.zeros([batch_size, _STRIDE, image_size, image_size, 3], dtype=np.float32)
+  batch_image = np.zeros([batch_size, frames, image_size[0], image_size[1], image_size[2]], dtype=np.float32)
 
   normal_list = _get_filenames_and_classes(normal_label)
   abnormal_list = _get_filenames_and_classes(abnormal_label)
@@ -215,7 +190,7 @@ def main(_):
 
   features = []
   for i in tqdm(range(len(gif_files))):
-    image_data = _concat_image(gif_files[i]) 
+    image_data = _concat_image(constants.UNQUALIFIED_DATA_PATH, gif_files[i])
     batch_image[0] = image_data
 
     feat = feature_extractor.forward([logits_name], batch_image, fetch_images=True)
@@ -234,7 +209,39 @@ def main(_):
   pickle.dump([gif_files, pca_features, labels], open(os.path.join(save_dir, 'features.p'), 'wb'))
 
 if __name__ == '__main__':
-  tf.app.run()
+  """
+  gan:gan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/gan/model.ckpt-29471
+  vae:vae/encoder/fc6  ROOT_PATH/Seenomaly/models/vae/model.ckpt-54717
+  vaegan:vaegan/generator/encoder/fc6  ROOT_PATH/Seenomaly/models/vaegan/model.ckpt-121858
+  aernn:aernnfc  ROOT_PATH/Seenomaly/models/aernn/model.ckpt-52198
+
+  ROOT_PATH/Seenomaly/data/synthetic_data/label.txt
+  ROOT_PATH/Seenomaly/data/test_data/images/label.txt
+  """
+
+  parser = argparse.ArgumentParser(description = "Process baseline dataset for model")
+  parser.add_argument("-n", "--netName", help="chooses the network type to be used", choices= ("gan", "vae", "vaegan", "aernn"), default="gan")
+  parser.add_argument("-c", "--checkpoint", help="sets the checkpint number", type=int, default=29471)
+
+  args = parser.parse_args()
+
+  logits_name = "gan/generator/encoder/fc6"
+  ck_path = os.path.join(constants.ROOT_PATH, "Seenomaly", "models", args.netName, f"model.ckpt-{args.checkpoint}")
+
+
+  batch_size = 1
+  image_size = 224
+  _STRIDE = 8
+
+  num_classes = 50
+  max_num_images = 225
+
+  abnormal_label = os.path.join(constants.DATA_PATH, "test_data", "images", "label.txt")
+  normal_label = os.path.join(constants.DATA_PATH, "label.txt")
+
+  save_dir = os.path.join(constants.DATA_PATH, "features", "real", args.netName)
+
+  exit(extract_features(args.netName, ck_path, batch_size, (image_size, image_size, 3), _STRIDE, logits_name, save_dir))
 
 
 
