@@ -161,32 +161,41 @@ def _concat_image(root, file_name):
     image_list.append(image)
   return image_list
 
-def extract_features(net_name, ck_path, batch_size, image_size, frames, logits_name, save_dir):
+def extract_features(net_name, ck_path, logits_name, image_paths, save_dir, test_label = os.path.join(constants.DATA_PATH, "test_data", "images", "label.txt"), batch_size = 1, image_dims = (224, 224, 3), frames = 8, max_num_images = 225, _num_classes = 50):
+  global num_classes
+  num_classes = _num_classes
+  global _STRIDE
+  _STRIDE = frames
+
+  global image_size
+  image_size = image_dims[0]
+
   feature_extractor = FeatureExtractor(net_name, ck_path, batch_size)
   feature_extractor.print_network_summary()
 
-  batch_image = np.zeros([batch_size, frames, image_size[0], image_size[1], image_size[2]], dtype=np.float32)
+  batch_image = np.zeros([batch_size, frames, image_dims[0], image_dims[1], image_dims[2]], dtype=np.float32)
 
-  normal_list = _get_filenames_and_classes(normal_label)
-  abnormal_list = _get_filenames_and_classes(abnormal_label)
+  test_list = _get_filenames_and_classes(test_label)
+  image_lists = [_get_filenames_and_classes(i) for i in image_paths]
+  image_lists = [i for j in image_lists for i in j]
 
-  if max_num_images < len(normal_list):
-    normal_list = [normal_list[i] for i in sorted(random.sample(range(len(normal_list)), max_num_images))]
+  if max_num_images < len(image_lists):
+    image_lists = [image_lists[i] for i in sorted(random.sample(range(len(image_lists)), max_num_images))]
 
-  if max_num_images < len(abnormal_list):
-    abnormal_list = [abnormal_list[i] for i in sorted(random.sample(range(len(abnormal_list)), max_num_images))]
+  if max_num_images < len( test_list):
+    test_list = [test_list[i] for i in sorted(random.sample(range(len(test_list)), max_num_images))]
 
   gif_files = []
   box_list = []
   labels = []
-  for filename in abnormal_list:
+  for filename in test_list:
     gif_files.append(filename.strip().split()[0])
     labels.append(filename.strip().split()[1])
-  for filename in normal_list:
+  for filename in image_lists:
     gif_files.append(filename.strip().split()[0])
     labels.append(0)
 
-  print("keeping %d images to analyze" % (len(normal_list) + len(abnormal_list)))
+  print("keeping %d images to analyze" % (len(image_lists) + len(test_list)))
 
   features = []
   for i in tqdm(range(len(gif_files))):
@@ -197,6 +206,8 @@ def extract_features(net_name, ck_path, batch_size, image_size, frames, logits_n
     feat = feat[logits_name]
     feat = np.squeeze(feat)
     features.append(feat)
+
+  print(features[0], len(features[0]))
 
   features = np.array(features)
   pca = PCA(n_components=200)
@@ -228,20 +239,21 @@ if __name__ == '__main__':
   logits_name = "gan/generator/encoder/fc6"
   ck_path = os.path.join(constants.ROOT_PATH, "Seenomaly", "models", args.netName, f"model.ckpt-{args.checkpoint}")
 
+  #batch_size = 1
+  #image_size = 224
+  #_STRIDE = 8
 
-  batch_size = 1
-  image_size = 224
-  _STRIDE = 8
+  #num_classes = 50
+  #max_num_images = 225
 
-  num_classes = 50
-  max_num_images = 225
-
-  abnormal_label = os.path.join(constants.DATA_PATH, "test_data", "images", "label.txt")
+  #test_label = os.path.join(constants.DATA_PATH, "test_data", "images", "label.txt")
   normal_label = os.path.join(constants.DATA_PATH, "label.txt")
+
+  image_paths = [normal_label]
 
   save_dir = os.path.join(constants.DATA_PATH, "features", "real", args.netName)
 
-  exit(extract_features(args.netName, ck_path, batch_size, (image_size, image_size, 3), _STRIDE, logits_name, save_dir))
+  exit(extract_features(args.netName, ck_path, logits_name, image_paths, save_dir))
 
 
 
